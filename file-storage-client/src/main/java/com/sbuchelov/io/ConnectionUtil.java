@@ -1,32 +1,32 @@
 package com.sbuchelov.io;
 
-import javafx.application.Platform;
+import io.netty.handler.codec.serialization.ObjectDecoderInputStream;
+import io.netty.handler.codec.serialization.ObjectEncoderOutputStream;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
 public class ConnectionUtil {
     private Socket socket;
-    private DataOutputStream dos;
-    private DataInputStream dis;
+    private ObjectEncoderOutputStream dos;
+    private ObjectDecoderInputStream dis;
 
     public ConnectionUtil() {
         try {
             socket = new Socket("localhost", 8189);
-            dis = new DataInputStream(socket.getInputStream());
-            dos = new DataOutputStream(socket.getOutputStream());
+            dos = new ObjectEncoderOutputStream(socket.getOutputStream());
+            dis = new ObjectDecoderInputStream(socket.getInputStream());
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public DataOutputStream getDos() {
+    public ObjectEncoderOutputStream getDos() {
         return dos;
     }
 
-    public DataInputStream getDis() {
+    public ObjectDecoderInputStream getDis() {
         return dis;
     }
 }

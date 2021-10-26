@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -22,7 +23,7 @@ public class ChatHandler implements Runnable {
 
     public ChatHandler(Socket socket, Server server) throws Exception {
         buffer = new byte[BUFFER_SIZE];
-        root = Path.of("server_root");
+        root = Paths.get("server_root");
         checkRoot(root);
 
         this.server = server;
