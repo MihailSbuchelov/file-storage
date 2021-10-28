@@ -1,13 +1,21 @@
 package com.sbuchelov.io;
 
+import com.sbuchelov.model.AbstractMessage;
+import com.sbuchelov.model.FileFromClientMessage;
+import com.sbuchelov.model.HiMessage;
+import com.sbuchelov.model.TreeMessage;
+import com.sun.javafx.collections.ObservableListWrapper;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 
-import java.io.*;
-import java.net.Socket;
+import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -17,8 +25,13 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 public class ChatController implements Initializable {
+    public Pane authPane;
     public ListView<String> listView;
-    public TextField input;
+    public ListView<String> listView2;
+    public Button sendButton;
+    public Button loadButton;
+    public TextField inputName;
+    public Label label;
     private Path root;
     private byte[] buffer;
     private ConnectionUtil currConnection;
@@ -35,18 +48,28 @@ public class ChatController implements Initializable {
             e.printStackTrace();
         }
         choiceFile();
+        choiceFile2();
         specificThread();
     }
 
     private void choiceFile() {
         listView.setOnMouseClicked(e -> {
-            if (e.getClickCount() == 2) {
+            if (e.getClickCount() == 1) {
+                loadButton.disableProperty().set(true);
+                sendButton.disableProperty().set(false);
                 String fileName = listView.getSelectionModel().getSelectedItem();
-                if (!Files.isDirectory(root.resolve(fileName))) {
-                    input.setText(fileName);
-                } else {
-                    input.setText("Select file! Not directory");
-                }
+                label.setText("File " + fileName + " will send on server!");
+            }
+        });
+    }
+
+    private void choiceFile2() {
+        listView2.setOnMouseClicked(e -> {
+            if (e.getClickCount() == 1) {
+                loadButton.disableProperty().set(false);
+                sendButton.disableProperty().set(true);
+                String fileName = listView.getSelectionModel().getSelectedItem();
+                label.setText("File " + fileName + " will load from server!");
             }
         });
     }
@@ -64,9 +87,16 @@ public class ChatController implements Initializable {
     private void specificThread() {
         Thread readThread = new Thread(() -> {
             try {
+                HiMessage hiMessage = new HiMessage();
+                hiMessage.setMessage(inputName.getText());
+                currConnection.getDos().writeObject(hiMessage);
+                currConnection.getDos().flush();
                 while (true) {
-                    String message = currConnection.getDis().readUTF();
-                    Platform.runLater(() -> input.setText(message));
+                    AbstractMessage abstractMessage = (AbstractMessage) currConnection.getDis().readObject();
+                    if (abstractMessage instanceof TreeMessage) {
+                        TreeMessage message = (TreeMessage) abstractMessage;
+                        Platform.runLater(() -> listView2.setItems(new ObservableListWrapper<>(message.getOutMessage())));
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -85,20 +115,38 @@ public class ChatController implements Initializable {
     }
 
     public void sendMessage(ActionEvent actionEvent) throws IOException {
-        String fileName = input.getText();
-        input.clear();
-        Path filePath = root.resolve(fileName);
+//        String fileName = input.getText();
+//        input.clear();
+//        currConnection.getDos().writeObject(new AbstractMessage(fileName));
+//        currConnection.getDos().writeObject(new AbstractMessage("User_1"));
+
+    }
+
+    public void sendFile(MouseEvent mouseEvent) throws IOException {
+        Path filePath = root.resolve(listView.getSelectionModel().getSelectedItem());
         if (Files.exists(filePath)) {
-            currConnection.getDos().writeUTF(fileName);
-            currConnection.getDos().writeLong(Files.size(filePath));
-            try (FileInputStream fis = new FileInputStream(filePath.toFile())) {
-                int read;
-                while ((read = fis.read(buffer)) != -1) {
-                    currConnection.getDos().write(buffer, 0, read);
-                }
-            }
+            AbstractMessage fileFromClient = new FileFromClientMessage("Test message from client");
+            currConnection.getDos().writeObject(fileFromClient);
+//            currConnection.getDos().writeLong(Files.size(filePath));
+//            try (FileInputStream fis = new FileInputStream(filePath.toFile())) {
+//                int read;
+//                while ((read = fis.read(buffer)) != -1) {
+//                    currConnection.getDos().write(buffer, 0, read);
+//                }
+//            }
             currConnection.getDos().flush();
         }
     }
 
+    public void loadFile(MouseEvent mouseEvent) {
+    }
+
+    public void authorisation(ActionEvent actionEvent) {
+        authPane.setStyle("-fx-background-color: DAE6F3");
+        authPane.setVisible(true);
+    }
+
+    public void closePaneAuth(ActionEvent actionEvent) {
+        authPane.setVisible(false);
+    }
 }
