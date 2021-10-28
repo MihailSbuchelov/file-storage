@@ -5,13 +5,10 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
-      </list>
-    </option>
-    <option name="ignoredFiles">
-      <set>
-        <option value="$PROJECT_DIR$/file-storage-client/pom.xml" />
         <option value="$PROJECT_DIR$/file-storage-server/pom.xml" />
-      </set>
+        <option value="$PROJECT_DIR$/file-storage-client/pom.xml" />
+        <option value="$PROJECT_DIR$/cloud-core/pom.xml" />
+      </list>
     </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
