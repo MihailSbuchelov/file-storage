@@ -3,7 +3,6 @@ package com.sbuchelov.io;
 import io.netty.handler.codec.serialization.ObjectDecoderInputStream;
 import io.netty.handler.codec.serialization.ObjectEncoderOutputStream;
 import lombok.Getter;
-
 import java.io.IOException;
 import java.net.Socket;
 
