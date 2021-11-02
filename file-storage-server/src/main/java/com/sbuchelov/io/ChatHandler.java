@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -22,10 +23,8 @@ public class ChatHandler implements Runnable {
 
     public ChatHandler(Socket socket, Server server) throws Exception {
         buffer = new byte[BUFFER_SIZE];
-        root = Path.of("server_root");
-        if (!Files.exists(root)) {
-            Files.createDirectory(root);
-        }
+        root = Paths.get("server_root");
+        checkRoot(root);
 
         this.server = server;
         counter++;
@@ -57,8 +56,18 @@ public class ChatHandler implements Runnable {
                 responseOk();
             }
         } catch (Exception e) {
-            System.err.println("Connection was broken");
+            System.err.println("Connection was broken!");
             e.printStackTrace();
+        }
+    }
+
+    private void checkRoot(Path root) {
+        if (!Files.exists(root)) {
+            try {
+                Files.createDirectory(root);
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
         }
     }
 

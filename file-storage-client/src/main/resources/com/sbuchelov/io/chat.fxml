@@ -3,10 +3,30 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="333.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sbuchelov.io.ChatController">
+<AnchorPane prefHeight="477.0" prefWidth="558.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sbuchelov.io.ChatController">
    <children>
-      <ListView fx:id="listView" layoutX="24.0" layoutY="14.0" prefHeight="328.0" prefWidth="288.0" />
-      <TextField onAction="#sendMessage" fx:id="input" layoutX="24.0" layoutY="351.0" prefHeight="26.0" prefWidth="288.0" />
+      <ListView fx:id="listViewClient" layoutX="21.0" layoutY="65.0" prefHeight="358.0" prefWidth="222.0"/>
+      <Button fx:id="sendButton" disable="true" layoutX="260.0" layoutY="134.0" mnemonicParsing="false" onMouseClicked="#sendFile" text="send" />
+      <Button fx:id="loadButton" disable="true" layoutX="260.0" layoutY="178.0" mnemonicParsing="false" onMouseClicked="#loadFile" text="load" />
+      <ListView fx:id="listViewStorage" layoutX="322.0" layoutY="65.0" prefHeight="358.0" prefWidth="214.0" />
+      <Label fx:id="label" layoutX="21.0" layoutY="444.0" prefHeight="18.0" prefWidth="515.0" />
+      <MenuBar layoutX="21.0" layoutY="14.0" prefHeight="26.0" prefWidth="515.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="Settings">
+               <items>
+                  <MenuItem fx:id="authorisation" mnemonicParsing="false" onAction="#authorisation" text="Authorisation..." />
+                  <SeparatorMenuItem mnemonicParsing="false" text="|" />
+                  <MenuItem mnemonicParsing="false" text="Connection settings" />
+               </items>
+          </Menu>
+            <Menu mnemonicParsing="false" text="Help" />
+        </menus>
+      </MenuBar>
+      <Pane fx:id="authPane" layoutX="100.0" layoutY="100.0" prefHeight="150.0" prefWidth="300.0" visible="false">
+         <children>
+            <Label layoutX="14.0" layoutY="34.0" text="Name:" />
+            <Button layoutX="223.0" layoutY="111.0" mnemonicParsing="false" onAction="#closePaneAuth" prefHeight="30" prefWidth="50" text="ok" />
+            <TextField fx:id="inputName" layoutX="68.0" layoutY="30.0" prefHeight="25.0" prefWidth="214.0" />
+         </children></Pane>
    </children>
 </AnchorPane>
