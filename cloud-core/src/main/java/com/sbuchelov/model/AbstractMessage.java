@@ -9,6 +9,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class AbstractMessage implements Serializable {
     private String message;
+    private CommandType type;
 
     public AbstractMessage() {
     }

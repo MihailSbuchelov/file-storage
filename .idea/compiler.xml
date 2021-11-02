@@ -7,10 +7,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="cloud-core" />
         <module name="file-storage-server" />
         <module name="file-storage-client" />
-        <module name="cloude-storage-server" />
-        <module name="cloude-core" />
+        <module name="cloud-storage-server" />
       </profile>
     </annotationProcessing>
   </component>

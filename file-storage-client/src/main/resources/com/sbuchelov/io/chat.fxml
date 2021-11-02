@@ -5,11 +5,10 @@
 
 <AnchorPane prefHeight="477.0" prefWidth="558.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sbuchelov.io.ChatController">
    <children>
-      <ListView fx:id="listView" layoutX="21.0" layoutY="65.0" prefHeight="358.0" prefWidth="222.0"/>
-<!--      <TextField fx:id="input" layoutX="24.0" layoutY="351.0" onAction="#sendMessage" prefHeight="26.0" prefWidth="288.0" />-->
+      <ListView fx:id="listViewClient" layoutX="21.0" layoutY="65.0" prefHeight="358.0" prefWidth="222.0"/>
       <Button fx:id="sendButton" disable="true" layoutX="260.0" layoutY="134.0" mnemonicParsing="false" onMouseClicked="#sendFile" text="send" />
       <Button fx:id="loadButton" disable="true" layoutX="260.0" layoutY="178.0" mnemonicParsing="false" onMouseClicked="#loadFile" text="load" />
-      <ListView fx:id="listView2" layoutX="322.0" layoutY="65.0" prefHeight="358.0" prefWidth="214.0" />
+      <ListView fx:id="listViewStorage" layoutX="322.0" layoutY="65.0" prefHeight="358.0" prefWidth="214.0" />
       <Label fx:id="label" layoutX="21.0" layoutY="444.0" prefHeight="18.0" prefWidth="515.0" />
       <MenuBar layoutX="21.0" layoutY="14.0" prefHeight="26.0" prefWidth="515.0">
         <menus>

@@ -2,31 +2,25 @@ package com.sbuchelov.io;
 
 import io.netty.handler.codec.serialization.ObjectDecoderInputStream;
 import io.netty.handler.codec.serialization.ObjectEncoderOutputStream;
+import lombok.Getter;
 
 import java.io.IOException;
 import java.net.Socket;
 
+@Getter
 public class ConnectionUtil {
     private Socket socket;
     private ObjectEncoderOutputStream dos;
     private ObjectDecoderInputStream dis;
 
-    public ConnectionUtil() {
+    public ConnectionUtil(String host, int port) {
         try {
-            socket = new Socket("localhost", 8189);
+            socket = new Socket(host, port);
             dos = new ObjectEncoderOutputStream(socket.getOutputStream());
             dis = new ObjectDecoderInputStream(socket.getInputStream());
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public ObjectEncoderOutputStream getDos() {
-        return dos;
-    }
-
-    public ObjectDecoderInputStream getDis() {
-        return dis;
     }
 }
