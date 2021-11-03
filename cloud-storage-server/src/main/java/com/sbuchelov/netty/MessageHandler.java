@@ -16,11 +16,12 @@ import java.nio.file.Paths;
 public class MessageHandler extends SimpleChannelInboundHandler<AbstractMessage> {
     private Path serverClientDir;
     private byte[] buffer;
+    private String userName;
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        serverClientDir = Paths.get("server_root");
-        ctx.writeAndFlush(new ListFilesMessage(serverClientDir));
+//        serverClientDir = Paths.get("server_root");
+//        ctx.writeAndFlush(new ListFilesMessage(serverClientDir));
         buffer = new byte[8192];
     }
 
@@ -28,13 +29,15 @@ public class MessageHandler extends SimpleChannelInboundHandler<AbstractMessage>
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, AbstractMessage abstractMessage) throws Exception {
         switch (abstractMessage.getType()) {
             case AUTH_MESSAGE:
-                new ListFilesMessage(Paths.get("server_root", abstractMessage.getMessage()));
+                auth((AuthMessage) abstractMessage, channelHandlerContext);
                 break;
             case FILE_DEL:
                 delFile((DellFileMessage) abstractMessage, channelHandlerContext);
+                channelHandlerContext.writeAndFlush(new ListFilesMessage(Paths.get("server_root", userName)));
                 break;
             case FILE_RENAME:
                 renameFile((RenameMessage) abstractMessage, channelHandlerContext);
+                channelHandlerContext.writeAndFlush(new ListFilesMessage(Paths.get("server_root", userName)));
                 break;
             case FILE_MESSAGE:
                 processFile((FileMessage) abstractMessage, channelHandlerContext);
@@ -46,10 +49,26 @@ public class MessageHandler extends SimpleChannelInboundHandler<AbstractMessage>
         }
     }
 
-    private void renameFile(RenameMessage abstractMessage, ChannelHandlerContext channelHandlerContext) {
+    private void auth(AuthMessage abstractMessage, ChannelHandlerContext channelHandlerContext) throws Exception {
+        if (abstractMessage.getUserName().isEmpty()) {
+            return;
+        } else {
+            serverClientDir = Paths.get("server_root", abstractMessage.getUserName());
+            userName = abstractMessage.getUserName();
+            channelHandlerContext.writeAndFlush(
+                    new ListFilesMessage(Paths.get("server_root", abstractMessage.getUserName())));
+        }
+
     }
 
-    private void delFile(DellFileMessage abstractMessage, ChannelHandlerContext channelHandlerContext) {
+    private void renameFile(RenameMessage abstractMessage, ChannelHandlerContext channelHandlerContext) throws IOException {
+        Files.copy(Paths.get(serverClientDir.toString(), abstractMessage.getOldName()),
+                Paths.get(serverClientDir.toString(), abstractMessage.getNewName()));
+        Files.delete(Paths.get(serverClientDir.toString(), abstractMessage.getOldName()));
+    }
+
+    private void delFile(DellFileMessage abstractMessage, ChannelHandlerContext channelHandlerContext) throws IOException {
+        Files.delete(Paths.get("server_root", userName, abstractMessage.getName()));
     }
 
     private void sendFile(FileRequest msg, ChannelHandlerContext ctx) throws IOException {
