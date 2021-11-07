@@ -9,7 +9,9 @@
         <outputRelativeToContentRoot value="true" />
         <module name="cloud-core" />
         <module name="cloud-storage-client" />
+        <module name="cloude-storage-server" />
         <module name="cloud-storage-server" />
+        <module name="cloude-core" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
