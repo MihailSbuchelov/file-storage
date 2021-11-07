@@ -6,10 +6,7 @@ import io.netty.handler.codec.serialization.ObjectEncoderOutputStream;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import lombok.SneakyThrows;
@@ -36,6 +33,7 @@ public class ChatController implements Initializable {
     public Pane authPane;
     public Pane renamePaneClient;
     public Pane renamePaneCloud;
+    public Pane aboutPane;
 
     public ListView<String> listViewClient;
     public ListView<String> listViewStorage;
@@ -54,6 +52,7 @@ public class ChatController implements Initializable {
     public TextField inputAuthName;
     public TextField inputNameFile;
     public TextField inputNameFileCloud;
+    public TextArea aboutArea;
 
     private Path root;
     private byte[] buffer;
@@ -266,7 +265,7 @@ public class ChatController implements Initializable {
 
     public void delButtonCloud(MouseEvent mouseEvent) throws Exception {
         if (listViewStorage.getFocusModel().getFocusedIndex() != -1) {
-            AbstractMessage delMessage = new DellFileMessage(CommandType.FILE_DEL, listViewStorage.getSelectionModel().getSelectedItem());
+            AbstractMessage delMessage = new DelFileMessage(CommandType.FILE_DEL, listViewStorage.getSelectionModel().getSelectedItem());
             connection.getDos().writeObject(delMessage);
         }
     }
@@ -325,5 +324,26 @@ public class ChatController implements Initializable {
             root = file.toPath().toAbsolutePath();
             fillFilesInView();
         }
+    }
+
+    public void aboutAction(ActionEvent actionEvent) {
+        aboutPane.setStyle("-fx-background-color: DAE6F3");
+        aboutArea.appendText("Вы используете облачное хранилище Cloud Storage 1.0\n\n" +
+                "Приложение позволяет:\n" +
+                "- копировать файлы с локального диска в облако\n" +
+                "- копировать файлы с облака на локальный диск\n" +
+                "- переименовывать файлы на диске и в облаке\n" +
+                "- удалять файлы на диске и в облаке\n" +
+                "- менять локальную папку\n" +
+                "________________________________________\n\n" +
+                "Для начала работы авторизуйтесь на вкладке:\n" +
+                "Настройки->Авторизация");
+        aboutArea.setWrapText(true);
+        aboutArea.setEditable(false);
+        aboutPane.setVisible(true);
+    }
+
+    public void closeAboutPane(ActionEvent actionEvent) {
+        aboutPane.setVisible(false);
     }
 }
