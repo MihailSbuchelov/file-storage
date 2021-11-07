@@ -8,10 +8,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="cloud-core" />
-        <module name="file-storage-server" />
-        <module name="file-storage-client" />
+        <module name="cloud-storage-client" />
         <module name="cloud-storage-server" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="file-storage-server" target="8" />
+    </bytecodeTargetLevel>
   </component>
 </project>
