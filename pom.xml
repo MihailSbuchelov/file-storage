@@ -12,6 +12,7 @@
         <module>cloud-core</module>
         <module>cloud-storage-server</module>
         <module>cloud-storage-client</module>
+        <module>cloud-storage-server-db</module>
     </modules>
 
     <properties>
