@@ -9,8 +9,10 @@
     <packaging>pom</packaging>
     <version>1</version>
     <modules>
-        <module>cloud-storage-server</module>
         <module>cloud-core</module>
+        <module>cloud-storage-server</module>
+        <module>cloud-storage-client</module>
+        <module>cloud-storage-server-db</module>
     </modules>
 
     <properties>

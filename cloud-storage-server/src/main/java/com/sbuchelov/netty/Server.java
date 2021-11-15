@@ -1,5 +1,6 @@
 package com.sbuchelov.netty;
 
+import com.sbuchelov.netty.handlers.*;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -27,7 +28,12 @@ public class Server {
                             channel.pipeline().addLast(
                                     new ObjectEncoder(),
                                     new ObjectDecoder(ClassResolvers.cacheDisabled(null)),
-                                    new MessageHandler()
+                                    new MessageHandler(),
+                                    new AuthHandler(),
+                                    new DelHandler(),
+                                    new RenameHandler(),
+                                    new FileMessageHandler(),
+                                    new FileRequestHandler()
                             );
                         }
                     });
