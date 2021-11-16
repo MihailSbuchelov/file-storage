@@ -1,11 +1,11 @@
-package com.sbuchelov.database.service;
+package com.sbuchelov.database.repository;
 
-public class CredentialsEntry {
+public class User {
     private String login;
     private String password;
     private String nickname;
 
-    public CredentialsEntry(String login, String password, String nickname) {
+    public User(String login, String password, String nickname) {
         this.login = login;
         this.password = password;
         this.nickname = nickname;

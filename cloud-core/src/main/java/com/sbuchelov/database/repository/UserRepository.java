@@ -1,7 +1,6 @@
 package com.sbuchelov.database.repository;
 
 import com.sbuchelov.database.service.ConnectionService;
-import com.sbuchelov.database.service.CredentialsEntry;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserRepository {
-    public CredentialsEntry findUser(String login, String password) {
+    public User findUser(String login, String password) {
         Connection connection = ConnectionService.connect();
         try {
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM USER WHERE LOGIN = ? AND PASS = ?");
@@ -20,7 +19,7 @@ public class UserRepository {
 
             ResultSet rs = statement.executeQuery();
             if (rs.next()) {
-                return new CredentialsEntry(
+                return new User(
                         rs.getString("login"),
                         rs.getString("pass"),
                         rs.getString("nickName")
@@ -34,17 +33,17 @@ public class UserRepository {
         }
     }
 
-    public List<CredentialsEntry> findAll() {
+    public List<User> findAll() {
         Connection connection = ConnectionService.connect();
         try {
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM USER");
 
             ResultSet rs = statement.executeQuery();
-            List<CredentialsEntry> users = new ArrayList<>();
+            List<User> users = new ArrayList<>();
 
             while (rs.next()) {
                 users.add(
-                        new CredentialsEntry(
+                        new User(
                                 rs.getString("login"),
                                 rs.getString("pass"),
                                 rs.getString("nickName"))
@@ -58,14 +57,14 @@ public class UserRepository {
         }
     }
 
-    public CredentialsEntry findByName(String name) {
+    public User findByName(String name) {
         Connection connection = ConnectionService.connect();
         try {
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM USER WHERE LOGIN = ?");
             statement.setString(1, name);
             ResultSet rs = statement.executeQuery();
             if (rs.next()) {
-                return new CredentialsEntry(
+                return new User(
                         rs.getString("login"),
                         rs.getString("pass"),
                         rs.getString("nickName")

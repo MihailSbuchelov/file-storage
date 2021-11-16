@@ -1,5 +1,6 @@
 package com.sbuchelov.database.service;
 
+import com.sbuchelov.database.repository.User;
 import com.sbuchelov.database.repository.UserRepository;
 
 public class Authentication {
@@ -10,7 +11,7 @@ public class Authentication {
     }
 
     public String findNicknameByLoginAndPassword(String login, String password) {
-        CredentialsEntry user = users.findUser(login, password);
+        User user = users.findUser(login, password);
         if (user != null) {
             return user.getNickname();
         }
@@ -18,7 +19,7 @@ public class Authentication {
     }
 
     public String findNicknameByLogin(String login) {
-        CredentialsEntry user = users.findByName(login);
+        User user = users.findByName(login);
         if (user != null) {
             return user.getNickname();
         } else return null;
